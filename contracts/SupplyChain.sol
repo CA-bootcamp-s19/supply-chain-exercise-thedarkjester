@@ -56,7 +56,7 @@ contract SupplyChain {
     event LogReceived(uint sku);
 
 /* Create a modifer that checks if the msg.sender is the owner of the contract */
-   modifier isContractOwner() { // Modifier
+   modifier isContractOwner() { // Modifier 
         require(
             msg.sender == owner, "Only the contract ownder can call this."
         );
@@ -124,9 +124,14 @@ contract SupplyChain {
   constructor() public {
     /* Here, set the owner as the person who instantiated the contract
        and set your skuCount to 0. */
-        owner = msg.sender;
+        owner = msg.sender; 
         skuCount = 0;
   }
+
+   //fallback function just in case.
+   function () external payable {
+        revert();
+   } 
 
   function addItem(string memory _name, uint _price) public nameNotEmpty(_name) hasPrice(_price) returns(bool){
     emit LogForSale(skuCount);
@@ -169,8 +174,10 @@ contract SupplyChain {
     emit LogReceived(sku);
   }
 
+  // should we restrict this to "isContractOwner" ? tests pass with it on.
+
   /* We have these functions completed so we can run tests, just ignore it :) */
-  function fetchItem(uint _sku) public view returns (string memory name, uint sku, uint price, uint state, address seller, address buyer) {
+  function fetchItem(uint _sku) public  view  returns (string memory name, uint sku, uint price, uint state, address seller, address buyer) {
     name = items[_sku].name;
     sku = items[_sku].sku;
     price = items[_sku].price;
