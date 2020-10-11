@@ -153,6 +153,8 @@ contract SupplyChain {
      _;
   }
 
+  /// @notice constructs the contract
+  /// @dev sets the owner of the contract and default skuCount to 0 (it is default, but setting anyway)
   constructor() public {
     /* Here, set the owner as the person who instantiated the contract
        and set your skuCount to 0. */
@@ -160,7 +162,8 @@ contract SupplyChain {
         skuCount = 0;
   }
 
-   //fallback function just in case.
+   /// @notice fallback function for unexpected payments 
+   /// @dev reverts payment if funds accidentally set without a function specific call
    function () external payable {
         revert();
    } 
